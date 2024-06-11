@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "562503554762",
+    "project_id": "textile-9bbd8",
+    "storage_bucket": "textile-9bbd8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:562503554762:android:3298b9e7b9a183f9dc8633",
+        "android_client_info": {
+          "package_name": "com.example.texttile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgEkR1-p8Ynewzmy8eWTCJex4HCjIa_3Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
