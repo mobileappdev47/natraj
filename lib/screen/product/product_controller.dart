@@ -187,6 +187,8 @@ class ProductController extends GetxController {
   TextEditingController productId2 = TextEditingController();
   TextEditingController productId3 = TextEditingController();
 
+  TextEditingController searchController = TextEditingController();
+
   File? imagePic;
   String? imageUrl;
   final ImagePicker _picker = ImagePicker();
@@ -297,52 +299,6 @@ class ProductController extends GetxController {
   }
 
 
-  // Future<void> submitData() async {
-  //   if (!formKey.currentState!.validate()) return;
-  //
-  //   try {
-  //     String? imageUrl = await uploadImageToStorage();
-  //     await FirebaseFirestore.instance.collection('products').add({
-  //       'productId': productId.text,
-  //       'productId1': productId1.text,
-  //       'productId2': productId2.text,
-  //       'productId3': productId3.text,
-  //       'imageUrl': imageUrl,
-  //     });
-  //
-  //     Get.back();
-  //     clearFields();
-  //     Get.snackbar('Success', 'Data added successfully');
-  //   } catch (e) {
-  //     Get.snackbar('Error', 'Failed to add data');
-  //   }
-  // }
-  //
-  // Future<void> updateData(String docId) async {
-  //   if (!formKey.currentState!.validate()) return;
-  //
-  //   try {
-  //     String? imageUrl = await uploadImageToStorage();
-  //     Map<String, dynamic> data = {
-  //       'productId': productId.text,
-  //       'productId1': productId1.text,
-  //       'productId2': productId2.text,
-  //       'productId3': productId3.text,
-  //     };
-  //
-  //     if (imageUrl != null) {
-  //       data['imageUrl'] = imageUrl;
-  //     }
-  //
-  //     await FirebaseFirestore.instance.collection('products').doc(docId).update(data);
-  //
-  //     Get.back();
-  //     clearFields();
-  //     Get.snackbar('Success', 'Data updated successfully');
-  //   } catch (e) {
-  //     Get.snackbar('Error', 'Failed to update data');
-  //   }
-  // }
 
   void clearFields() {
     productId.clear();

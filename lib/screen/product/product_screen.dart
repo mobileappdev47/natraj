@@ -67,6 +67,7 @@ class ProductScreen extends StatelessWidget {
   Widget buttonSubmit(String? productId) {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(backgroundColor: const Color(0xFF6449D8)),
+
       onPressed: () {
         if (productController.formKey.currentState?.validate() ?? false) {
           productId != null

@@ -22,20 +22,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
       setState(() {
         allDataList = value;
         filterList = value;
-
-        filterList.sort((a, b) {
-          var aId = a['productId'];
-          var bId = b['productId'];
-
-          // Check if both product IDs are numeric
-          if (_isNumeric(aId) && _isNumeric(bId)) {
-            return int.parse(aId).compareTo(int.parse(bId));
-          } else {
-            return aId.compareTo(bId);
-          }
-        });
-
-        // filterList.sort((a,b) => int.parse(a['productId']).compareTo(int.parse(b['productId'])));
+        sortingData();
       });
     });
   }
@@ -44,7 +31,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
     return int.tryParse(s) != null;
   }
 
-  TextEditingController searchController = TextEditingController();
+
 
   Future<List<DocumentSnapshot>> fetchDataFromFirestore() async {
     QuerySnapshot querySnapshot =
@@ -56,6 +43,20 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   List<DocumentSnapshot> allDataList = [];
   List<DocumentSnapshot> filterList = [];
 
+  void sortingData(){
+    filterList.sort((a, b) {
+      var aId = a['productId'];
+      var bId = b['productId'];
+
+      // Check if both product IDs are numeric
+      if (_isNumeric(aId) && _isNumeric(bId)) {
+        return int.parse(aId).compareTo(int.parse(bId));
+      } else {
+        return aId.compareTo(bId);
+      }
+    });
+  }
+
   void searchData(String value) {
     setState(() {
       if (value.isNotEmpty) {
@@ -63,8 +64,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
           String productId = element.get('productId').toString().toLowerCase();
           return productId.contains(value.toLowerCase());
         }).toList();
+        sortingData();
       } else {
         filterList = allDataList;
+        sortingData();
       }
     });
   }
@@ -77,6 +80,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
           backgroundColor: const Color(0xFF6449D8),
           foregroundColor: Colors.white,
           onPressed: () {
+            controller.searchController.clear();
             controller.productId.clear();
             controller.productId1.clear();
             controller.productId2.clear();
@@ -89,17 +93,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                   allDataList = value;
                   filterList = value;
 
-                  filterList.sort((a, b) {
-                    var aId = a['productId'];
-                    var bId = b['productId'];
-
-                    // Check if both product IDs are numeric
-                    if (_isNumeric(aId) && _isNumeric(bId)) {
-                      return int.parse(aId).compareTo(int.parse(bId));
-                    } else {
-                      return aId.compareTo(bId);
-                    }
-                  });
+                  sortingData();
                 });
               });
             });
@@ -116,7 +110,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                 child: TextField(
                   keyboardType: TextInputType.number,
                   // autofocus: true,
-                  controller: searchController,
+                  controller: controller.searchController,
                   onChanged: (value) {
                     searchData(value);
                   },
@@ -165,7 +159,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                     return filterList.isEmpty
                         ? const Center(
                             child: Text(
-                              ' No data foubnd!',
+                              ' No data found!',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           )
@@ -245,18 +239,13 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                                           const Text(
                                                             'p1 : ',
                                                             style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
+                                                                fontWeight: FontWeight.bold),
                                                           ),
                                                           Text(
                                                             '${filterList[index].get('productId1')}',
                                                             style: const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: Colors
-                                                                    .green,
+                                                                fontWeight: FontWeight.bold,
+                                                                color: Colors.green,
                                                                 fontSize: 16),
                                                           ),
                                                         ],
@@ -269,16 +258,12 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                                           const Text(
                                                             'p2 : ',
                                                             style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
+                                                                fontWeight: FontWeight.bold),
                                                           ),
                                                           Text(
                                                             '${filterList[index].get('productId2')}',
                                                             style: const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
+                                                                fontWeight: FontWeight.bold,
                                                                 color: Colors
                                                                     .purple,
                                                                 fontSize: 16),
@@ -293,9 +278,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                                           const Text(
                                                             'p3 : ',
                                                             style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
+                                                                fontWeight: FontWeight.bold),
                                                           ),
                                                           Text(
                                                             '${filterList[index].get('productId3')}',
@@ -321,41 +304,15 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                                               Color(0xFF6449D8),
                                                         ),
                                                         onPressed: () {
+                                                          controller.searchController.clear();
                                                           Get.to(() => ProductScreen(
-                                                                  product:
-                                                                      filterList[
-                                                                          index]))!
+                                                                  product: filterList[index]))!
                                                               .then((_) {
-                                                            fetchDataFromFirestore()
-                                                                .then((value) {
+                                                            fetchDataFromFirestore().then((value) {
                                                               setState(() {
-                                                                allDataList =
-                                                                    value;
-                                                                filterList =
-                                                                    value;
-                                                                filterList.sort(
-                                                                    (a, b) {
-                                                                  var aId = a[
-                                                                      'productId'];
-                                                                  var bId = b[
-                                                                      'productId'];
-
-                                                                  // Check if both product IDs are numeric
-                                                                  if (_isNumeric(
-                                                                          aId) &&
-                                                                      _isNumeric(
-                                                                          bId)) {
-                                                                    return int.parse(
-                                                                            aId)
-                                                                        .compareTo(
-                                                                            int.parse(bId));
-                                                                  } else {
-                                                                    return aId
-                                                                        .compareTo(
-                                                                            bId);
-                                                                  }
-                                                                });
-                                                                //   filterList.sort((a,b) => int.parse(a['productId']).compareTo(int.parse(b['productId'])));
+                                                                allDataList = value;
+                                                                filterList = value;
+                                                                sortingData();
                                                               });
                                                             });
                                                           });
@@ -415,38 +372,14 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                                                   .doc(docId)
                                                                   .delete();
                                                               setState(() {
-                                                                filterList
-                                                                    .removeAt(
-                                                                        index);
+                                                                filterList.removeAt(index);
                                                                 allDataList =
                                                                     filterList;
-                                                                filterList.sort(
-                                                                    (a, b) {
-                                                                  var aId = a[
-                                                                      'productId'];
-                                                                  var bId = b[
-                                                                      'productId'];
-
-                                                                  // Check if both product IDs are numeric
-                                                                  if (_isNumeric(
-                                                                          aId) &&
-                                                                      _isNumeric(
-                                                                          bId)) {
-                                                                    return int.parse(
-                                                                            aId)
-                                                                        .compareTo(
-                                                                            int.parse(bId));
-                                                                  } else {
-                                                                    return aId
-                                                                        .compareTo(
-                                                                            bId);
-                                                                  }
-                                                                });
-                                                                // filterList.sort((a,b) => int.parse(a['productId']).compareTo(int.parse(b['productId'])));
+                                                                sortingData();
                                                               });
                                                             }
                                                           }
-                                                          // Other ListTile properties as needed
+
                                                           ),
                                                     ],
                                                   ),

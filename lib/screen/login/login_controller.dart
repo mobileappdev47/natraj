@@ -27,7 +27,7 @@ class LoginController extends GetxController {
       try {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isLoggedIn', true);
-        Get.to(DashBoardScreen());
+        Get.to(const DashBoardScreen());
       } catch (e) {
         print('Error signing in: $e');
       }
@@ -36,7 +36,3 @@ class LoginController extends GetxController {
     }
   }
 }
-// SharedPreferences prefs = await SharedPreferences.getInstance();
-// await prefs.setBool('isLoggedIn', false);
-//
-// Get.off(() => LoginScreen());
